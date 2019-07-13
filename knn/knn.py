@@ -28,10 +28,8 @@ def classify0(inX:list, dataSet:ndarray, labels:list, K:int)->str:
     dataSetSize = dataSet.shape[0]
     diffMat = tile(inX, (dataSetSize,1)) - dataSet #构建一个ndarray ，重复第二个参数的形状格式
     sqDiffMat = diffMat**2
-    distances = sqDiffMat**0.5
+    sqDistances = sqDiffMat.sum(axis=1)
+    distances = sqDistances**0.5
     sortedDistIndicies = distances.argsort() # argsort 按照ndarray的索引位置排序
     classCount={}
     for i in range(K):
-
-
-
