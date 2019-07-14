@@ -87,6 +87,7 @@ if __name__ == '__main__':
     print(datingDataMat)
     print("----------------------datingLabels---------------------")
     print(datingLabels)
+    '''
     fig1=plt.figure()
     ax1 = fig1.add_subplot(111)
     ax1.scatter(datingDataMat[:,1],datingDataMat[:,2])
@@ -95,4 +96,18 @@ if __name__ == '__main__':
     ax2 = fig2.add_subplot(111)
     ax2.scatter(datingDataMat[:, 1], datingDataMat[:, 2],15.0*array(datingLabels),
                15.0*array(datingLabels))
+    plt.show()
+    '''
+    plt.figure(1)
+    ax1=plt.subplot(221)
+    ax1.scatter(datingDataMat[:, 0], datingDataMat[:, 1],15.0*array(datingLabels),
+               15.0*array(datingLabels))
+    ax2=plt.subplot(222)
+    ax2.scatter(datingDataMat[:, 0], datingDataMat[:, 2],15.0*array(datingLabels),
+               15.0*array(datingLabels))
+    ax3=plt.subplot(223)
+    ax3.scatter(datingDataMat[:,1], datingDataMat[:, 2], 15.0 * array(datingLabels),
+                15.0 * array(datingLabels))
+    ax4=plt.subplot(224)
+    ax4.scatter(datingDataMat[:,0], datingDataMat[:, 2] ,datingLabels ,datingLabels)
     plt.show()
