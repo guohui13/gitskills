@@ -57,10 +57,10 @@ def file2matrix(filename: str) -> ndarray:
             classLabelVector = []
             index = 0
 
-            for line in arrayOlines:
-                line = line.strip()
-                listFromLine = line.split('\t')
-                returnMat[index, :] = listFromLine[0:3]
+            for line in arrayOlines: # line 是str类型
+                line = line.strip() # line 仍是str 类型
+                listFromLine = line.split('\t') # line转换成list
+                returnMat[index, :] = listFromLine[0:3] #矩阵赋值，将list转换成ndarray格式
                 if listFromLine[-1].isdigit():
                     classLabelVector.append(int(listFromLine[-1]))
                 else:
@@ -70,7 +70,7 @@ def file2matrix(filename: str) -> ndarray:
     except Exception as e:
         print(e)
 
-
+# 图形化数据进行数据可视化分析
 def analysis_data(groups: ndarray, labels: ndarray) -> None:
     try:
         datingDataMat, labels = groups, datingLabels
