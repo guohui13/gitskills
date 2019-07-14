@@ -74,8 +74,25 @@ def file2matrix(filename:str)->ndarray:
         print(e)
 
 
-def analysis_data():
-    pass
+def analysis_data(groups:ndarray,labels:ndarray)->None:
+    try:
+        datingDataMat,labels = groups,datingLabels
+        plt.figure(1)  # pyplot有图形和轴的概念 figure代表当前图形 图形1
+        ax1 = plt.subplot(221)  # 图形划分四块使用第一块
+        # ax 画散点图 坐标 x，y ，点大小，颜色
+        ax1.scatter(datingDataMat[:, 0], datingDataMat[:, 1], 15.0 * array(datingLabels),
+                    15.0 * array(datingLabels))  # 两列数据，三个分类
+        ax2 = plt.subplot(222)  # 图形划分四块使用第2块
+        ax2.scatter(datingDataMat[:, 0], datingDataMat[:, 2], 15.0 * array(datingLabels),
+                    15.0 * array(datingLabels))  # 两列数据，三个分类
+        ax3 = plt.subplot(223)
+        ax3.scatter(datingDataMat[:, 1], datingDataMat[:, 2], 15.0 * array(datingLabels),
+                    15.0 * array(datingLabels))  # 两列数据，三个分类
+        ax4 = plt.subplot(224)
+        ax4.scatter(datingDataMat[:, 1], datingDataMat[:, 2])  # 原始图像不加入颜色的时候
+        plt.show()
+    except Exception as e:
+        print(e)
 
 
 
@@ -98,17 +115,5 @@ if __name__ == '__main__':
                15.0*array(datingLabels))
     plt.show()
     '''
-    plt.figure(1)  #pyplot有图形和轴的概念 figure代表当前图形 图形1
-    ax1=plt.subplot(221) #图形划分四块使用第一块
-    # ax 画散点图 坐标 x，y ，点大小，颜色
-    ax1.scatter(datingDataMat[:, 0], datingDataMat[:, 1],15.0*array(datingLabels),
-               15.0*array(datingLabels)) # 两列数据，三个分类
-    ax2=plt.subplot(222) #图形划分四块使用第2块
-    ax2.scatter(datingDataMat[:, 0], datingDataMat[:, 2],15.0*array(datingLabels),
-               15.0*array(datingLabels)) # 两列数据，三个分类
-    ax3=plt.subplot(223)
-    ax3.scatter(datingDataMat[:,1], datingDataMat[:, 2], 15.0 * array(datingLabels),
-                15.0 * array(datingLabels)) # 两列数据，三个分类
-    ax4=plt.subplot(224)
-    ax4.scatter(datingDataMat[:,1], datingDataMat[:, 2]  ) #原始图像不加入颜色的时候
-    plt.show()
+    analysis_data(datingDataMat,datingLabels) # 分析数据
+
