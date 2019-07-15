@@ -10,6 +10,7 @@
                    19-7-9:
 -------------------------------------------------
 """
+
 __author__ = 'gh'
 
 import operator
@@ -92,12 +93,13 @@ def analysis_data(groups: ndarray, labels: ndarray) -> None:
     except Exception as e:
         print(e)
 
-# 归一化矩阵
+
+# 归一化矩阵 (oldValue-min)/(max-min)
 def autoNorm(dataSet: ndarray) -> ndarray:
     minVals = dataSet.min(axis=0)
     maxVals = dataSet.max(axis=0)
     ranges = maxVals - minVals
-    normDataSet = zeros(shape(dataSet))
+    #normDataSet = zeros(shape(dataSet)) # 使用0阵初始化一个矩阵
     m = dataSet.shape[0]
     normson = dataSet - tile(minVals, (m, 1))  # tile 复制多行
     # normmom = tile(maxVals,(m,1)) - tile(minVals,(m,1)) #复制多行
@@ -107,26 +109,37 @@ def autoNorm(dataSet: ndarray) -> ndarray:
     return norm, ranges, minVals
 
 
-
-#测试分类器效果
-def datingClassTest():
-    hoRatio = 0.10 # 设置抽样测试比例
-    datingDataMat,datingLabels = file2matrix(r'./data/datingTestSet.txt')
-    normMat , ranges , minVals = autoNorm(datingDataMat)
+# 测试分类器效果
+def datingClassTest() -> None:
+    hoRatio = 0.10  # 设置抽样测试比例
+    datingDataMat, datingLabels = file2matrix(r'./data/datingTestSet.txt')
+    normMat, ranges, minVals = autoNorm(datingDataMat)
     m = normMat.shape[0]
-    numTestVecs = int(m*hoRatio)
+    numTestVecs = int(m * hoRatio)
     errorCount = 0.0
     for i in range(numTestVecs):
         # 用前10%的数据作为输入数据点， 用90%的数据做数据集 ，得到分类结果
-        classifierResult = classify0(normMat[i,:], normMat[numTestVecs:m,:],datingLabels[numTestVecs:m],5) #k为偶数分类器错误率提升
+        classifierResult = classify0(normMat[i, :], normMat[numTestVecs:m, :], datingLabels[numTestVecs:m],
+                                     5)  # k为偶数分类器错误率提升
         print("分类器分类结果为 : {:.0f} , " \
-              "实际结果为 : {:.0f} ".format(classifierResult,datingLabels[i]))
+              "实际结果为 : {:.0f} ".format(classifierResult, datingLabels[i]))
         if classifierResult != datingLabels[i]:
             print("↑这个分类错误↑")
             errorCount += 1
-    print("the total error rate is : {:.2%}".format(errorCount/float(numTestVecs)))
+    print("the total error rate is : {:.2%}".format(errorCount / float(numTestVecs)))
 
 
+# 手动输入数据产生分类结果
+def classifyPerson():
+    resultList = ['not at all', 'in small doses', 'in large doses']
+    percentTats = float(input("percentage of time spent playing video games?"))  # python3 不再使用raw_input
+    ffMiles = float(input("frequent flier miles earned per year?"))
+    iceCream = float(input("liters of ice cream consumed per year?"))
+    datingDataMat, datingLabels = file2matrix(r'./data/datingTestSet.txt')
+    normat, ranges, minvals = autoNorm(datingDataMat)
+    in_data = array([ffMiles, percentTats, iceCream])
+    classifierResult = classify0(in_data / ranges, normat, datingLabels, 5)
+    print("you will probably like this person : {}".format(resultList[classifierResult - 1]))  # 得到的分类标签跟数组差1 所以减法
 
 
 if __name__ == '__main__':
@@ -150,3 +163,4 @@ if __name__ == '__main__':
     '''
     analysis_data(datingDataMat, datingLabels)  # 分析数据
     datingClassTest()
+    classifyPerson()
