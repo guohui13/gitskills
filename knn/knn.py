@@ -57,10 +57,10 @@ def file2matrix(filename: str) -> ndarray:
             classLabelVector = []
             index = 0
 
-            for line in arrayOlines: # line 是str类型
-                line = line.strip() # line 仍是str 类型
-                listFromLine = line.split('\t') # line转换成list
-                returnMat[index, :] = listFromLine[0:3] #矩阵赋值，将list转换成ndarray格式
+            for line in arrayOlines:  # line 是str类型
+                line = line.strip()  # line 仍是str 类型
+                listFromLine = line.split('\t')  # line转换成list
+                returnMat[index, :] = listFromLine[0:3]  # 矩阵赋值，将list转换成ndarray格式
                 if listFromLine[-1].isdigit():
                     classLabelVector.append(int(listFromLine[-1]))
                 else:
@@ -69,6 +69,7 @@ def file2matrix(filename: str) -> ndarray:
             return returnMat, classLabelVector
     except Exception as e:
         print(e)
+
 
 # 图形化数据进行数据可视化分析
 def analysis_data(groups: ndarray, labels: ndarray) -> None:
@@ -91,6 +92,42 @@ def analysis_data(groups: ndarray, labels: ndarray) -> None:
     except Exception as e:
         print(e)
 
+# 归一化矩阵
+def autoNorm(dataSet: ndarray) -> ndarray:
+    minVals = dataSet.min(axis=0)
+    maxVals = dataSet.max(axis=0)
+    ranges = maxVals - minVals
+    normDataSet = zeros(shape(dataSet))
+    m = dataSet.shape[0]
+    normson = dataSet - tile(minVals, (m, 1))  # tile 复制多行
+    # normmom = tile(maxVals,(m,1)) - tile(minVals,(m,1)) #复制多行
+    normmom = tile(ranges, (m, 1))
+    # python 做线性代数运算的时候，两种运算，一种叫 element-wise的叫逐个元素计算 ，还有一种是矩阵运算
+    norm = normson / normmom  # element-wise
+    return norm, ranges, minVals
+
+
+
+#测试分类器效果
+def datingClassTest():
+    hoRatio = 0.10 # 设置抽样测试比例
+    datingDataMat,datingLabels = file2matrix(r'./data/datingTestSet.txt')
+    normMat , ranges , minVals = autoNorm(datingDataMat)
+    m = normMat.shape[0]
+    numTestVecs = int(m*hoRatio)
+    errorCount = 0.0
+    for i in range(numTestVecs):
+        # 用前10%的数据作为输入数据点， 用90%的数据做数据集 ，得到分类结果
+        classifierResult = classify0(normMat[i,:], normMat[numTestVecs:m,:],datingLabels[numTestVecs:m],5) #k为偶数分类器错误率提升
+        print("分类器分类结果为 : {:.0f} , " \
+              "实际结果为 : {:.0f} ".format(classifierResult,datingLabels[i]))
+        if classifierResult != datingLabels[i]:
+            print("↑这个分类错误↑")
+            errorCount += 1
+    print("the total error rate is : {:.2%}".format(errorCount/float(numTestVecs)))
+
+
+
 
 if __name__ == '__main__':
     groups, labels = createDataSet()
@@ -112,3 +149,4 @@ if __name__ == '__main__':
     plt.show()
     '''
     analysis_data(datingDataMat, datingLabels)  # 分析数据
+    datingClassTest()
