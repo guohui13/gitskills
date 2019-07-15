@@ -99,7 +99,7 @@ def autoNorm(dataSet: ndarray) -> ndarray:
     minVals = dataSet.min(axis=0)
     maxVals = dataSet.max(axis=0)
     ranges = maxVals - minVals
-    #normDataSet = zeros(shape(dataSet)) # 使用0阵初始化一个矩阵
+    # normDataSet = zeros(shape(dataSet)) # 使用0阵初始化一个矩阵
     m = dataSet.shape[0]
     normson = dataSet - tile(minVals, (m, 1))  # tile 复制多行
     # normmom = tile(maxVals,(m,1)) - tile(minVals,(m,1)) #复制多行
@@ -142,6 +142,16 @@ def classifyPerson():
     print("you will probably like this person : {}".format(resultList[classifierResult - 1]))  # 得到的分类标签跟数组差1 所以减法
 
 
+def img2vector(filename: str) -> ndarray:
+    vec = []
+    with open(filename) as fr:
+        for line in fr.readlines():
+            vec.append(list(line.strip()))
+    ndvec = array(vec, dtype=float64)
+    ndvec1 = ndvec.reshape(1, 1024)
+    return ndvec1
+
+
 if __name__ == '__main__':
     groups, labels = createDataSet()
     k = classify0([1, 1], groups, labels, 3)
@@ -164,3 +174,4 @@ if __name__ == '__main__':
     analysis_data(datingDataMat, datingLabels)  # 分析数据
     datingClassTest()
     classifyPerson()
+    ret=img2vector()
