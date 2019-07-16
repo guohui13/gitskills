@@ -17,6 +17,7 @@ import operator
 
 import matplotlib.pyplot as plt
 from numpy import *
+import os
 
 
 # 创建一个数据集和标注
@@ -152,6 +153,38 @@ def img2vector(filename: str) -> ndarray:
     return ndvec1
 
 
+
+def handwriteing():
+    hwlabels=[]
+    trainfiles = os.listdir('./data/trainingDigits')
+    tcnt = len(trainfiles)
+    # 这个书里的矩阵转换都是使用zeros来初始化的，个人采用的np.array转list成array不如这个易于阅读
+    trainingmat = zeros((tcnt,1024))
+    for i in range(tcnt): # 训练数据赋值和标签分类
+        filename = trainfiles[i]
+        filestr = filename.split('.')[0]
+        classnum = int(filestr.split('_')[0])
+        hwlabels.append(classnum)
+        trainingmat[i] = img2vector('./data/trainingDigits/'+filename)
+    testfiles = os.listdir('./data/testDigits/')
+    errcount=0.0
+    testcnt = len(testfiles)
+    for i in range(testcnt): # 循环内逐个测试
+        filename = testfiles[i]
+        filestr = filename.split('.')[0]
+        classnum = int(filestr.split('_')[0])
+        vect_test = img2vector('./data/testDigits/' + filename)
+        test_classnum = classify0(vect_test,trainingmat,hwlabels,5)
+        print("分类器结果 {:d}，实际结果 {:d}".format(test_classnum,classnum) )
+        if classnum != test_classnum:
+            errcount += 1
+    print("分类器的准确率是 {:.2%}".format(float((testcnt - errcount)/testcnt)))
+
+
+
+
+
+
 if __name__ == '__main__':
     groups, labels = createDataSet()
     k = classify0([1, 1], groups, labels, 3)
@@ -173,5 +206,7 @@ if __name__ == '__main__':
     '''
     analysis_data(datingDataMat, datingLabels)  # 分析数据
     datingClassTest()
-    classifyPerson()
-    ret=img2vector()
+    #classifyPerson()
+    ret=img2vector(r'./data/trainingDigits/8_54.txt')
+    handwriteing()
+
