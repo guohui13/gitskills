@@ -23,7 +23,7 @@ def createdataset()-> list:
     return dataset,labels
 
 def calcShannonEnt(data:ndarray) -> float:
-    pass
+    numEntries = len(data)
 
 
 if __name__ == '__main__':
