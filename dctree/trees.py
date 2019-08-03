@@ -22,6 +22,8 @@ def createdataset()-> list:
     labels = ['no surfacing', 'flippers']
     return dataset,labels
 
+def calcShannonEnt(data:ndarray) -> float:
+    pass
 
 
 if __name__ == '__main__':
