@@ -22,6 +22,13 @@ def createdataset()-> list:
     labels = ['no surfacing', 'flippers']
     return dataset,labels
 
+def calcShannonEnt(dataset:ndarray) -> float :
+    numEntries = len(dataset)
+    labelCounts = {}
+    for featVec in dataset:
+        currentLabel = featVec[-1]
+
+
 
 
 if __name__ == '__main__':
