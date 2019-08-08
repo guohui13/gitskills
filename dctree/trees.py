@@ -44,7 +44,7 @@ def calcShannonEnt(dataset) -> float :  # 计算熵的函数，根据频率概�
     return shannonEnt
 
 
-def splitDataSet(dataset:ndarray,axis:int,value:float) -> ndarray:
+def splitDataSet(dataset:ndarray,axis:int,value:float) -> ndarray: # 去掉的轴是消耗的特征
     #划分矩阵，返回划分后符合条件的矩阵，axis是划分轴（特征轴），value是划分轴的划分值,不符合条件的值的所在样本（即行）全部刨除，画图易于理解
     retDataset = [] #返回的划分后的矩阵的初始化
     for featVec in dataset: #遍历矩阵行
@@ -66,7 +66,7 @@ def chooseBestFeatureTosplit(dataset:ndarray)-> list:
         for value in uniqvals: # 根据划分轴的不同元素值进行划分
             subdataset = splitDataSet(dataset, i, value) # 划分轴划分后的结果集
             prob = len(subdataset)/float(len(dataset)) #划分后的数据的分类概率
-            subEntropy += prob*calcShannonEnt(subdataset) #信息增益公式的被减数 Gain(S,A)=Entropy(S) - (Sv/S) * Entropy(Sv)
+            subEntropy += prob*calcShannonEnt(subdataset) #信息增益公式的被减数 Gain(S,A)=Entropy(S) - Σ(Sv/S) * Entropy(Sv)
             # 信息增益公式  信息增益（划分前，划分后）= 划分前的熵 - sum(（划分后的数据集的长度/ 划分前的数据集的长度）* 划分后的数据集的熵)
         infoGain = baseEntropy - subEntropy # 信息增益最大化的特征就是最好的特征
         if infoGain > bestInfoGain:
